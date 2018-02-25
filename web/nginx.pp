@@ -1,3 +1,4 @@
+
 package { "nginx":
     ensure => installed
 }
@@ -14,35 +15,14 @@ file { "/etc/nginx/sites-enabled/default":
     notify  => Service["nginx"]
 }
 
-file { "/www":
-    ensure => "directory"
-}
-file { "/www/index.html":
-    require => File["/www"],
-    ensure => "file",
-    content => "<!DOCTYPE html>
-        <html><body>
-        Hello, world.
-        "
+nginx::resource::upstream { 'app_layer':
+    members => [
+      'server 127.0.0.1:6060',
+      'server 127.0.0.1:6061'
+  ],
 }
 
-file { "/etc/nginx/sites-available/puppet-demo":
-    require => [
-        Package["nginx"],
-        File["/www"]
-    ],
-    ensure => "file",
-    content =>
-        "server {
-            listen 80 default_server;
-            server_name _;
-            location / { root /www; }
-        }",
-    notify => Service["nginx"]
-}
-file { "/etc/nginx/sites-enabled/puppet-demo":
-    require => File["/etc/nginx/sites-available/puppet-demo"],
-    ensure => "link",
-    target => "/etc/nginx/sites-available/puppet-demo",
-    notify => Service["nginx"]
+nginx::resource::server { 'app_layer.com':
+  listen_port => 80,
+  proxy => 'http://app_layer',
 }
