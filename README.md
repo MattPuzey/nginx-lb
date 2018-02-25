@@ -24,3 +24,4 @@ Run the app:
 ```
 docker run -itd --publish 6060:8080 --rm --name go-app go-app
 ```
+

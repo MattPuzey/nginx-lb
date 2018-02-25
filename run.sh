@@ -17,12 +17,16 @@ function runLoadBalancer() {
     docker run -d --publish 32768:80 --name nginx nginx
 }
 
+function clearIntermediateImages() {
+    docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+}
+
 
 function main(){
     buildDependencies
     runAppInstance 1
     runAppInstance 2
     runLoadBalancer
-
+    clearIntermediateImages
 }
 $@
