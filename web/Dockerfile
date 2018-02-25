@@ -3,7 +3,7 @@ MAINTAINER Matthew Puzey "mpuzey1@outlook.com"
 
 #ADD nginx.conf /etc/nginx/
 ADD . /
-COPY nginx.pp /
+ADD nginx.pp /nginx.pp
 
 EXPOSE 80 32768
 
