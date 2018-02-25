@@ -5,17 +5,19 @@ function buildDependencies (){
     popd
 }
 
-function runAppInstance() {
+function appInstance() {
     local INSTANCE_NAME=$1
 }
 
-function runLoadBalancer() {
+function loadBalancer() {
     docker rm -f nginx
     pushd web
     docker build . --rm -t web
     popd
-    #docker run -td --publish 32768:80 --name nginx nginx
+#    docker run -td --publish 32768:80 --name nginx nginx
     docker run -it --publish 32768:80 --name nginx nginx sh -c "while true; do $(echo date); sleep 1; done"
+#    docker run -it --publish 32768:80 --name nginx nginx sh -c "puppet apply /nginx.pp"
+
 
 }
 
