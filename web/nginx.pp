@@ -11,6 +11,6 @@ service { "nginx":
 
 file { "/etc/nginx/sites-enabled/default":
     require => Package["nginx"],
-    ensure  => absent,
+    ensure  => running,
     notify  => Service["nginx"]
 }
