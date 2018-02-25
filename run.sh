@@ -16,9 +16,8 @@ function loadBalancer() {
     pushd web
     docker build . --rm -t nginx
     popd
-    docker run -td --publish 32768:80 --name nginx nginx
-#    docker run -it --publish 32768:80 --name nginx nginx sh -c "while true; do $(echo date); sleep 1; done"
-#    docker run -it --publish 32768:80 --name nginx nginx sh -c "puppet apply /nginx.pp"
+#    docker run -td --publish 32768:80 --name nginx nginx
+    docker run -it --publish 32768:80 --name nginx nginx sh -c "puppet apply /nginx.pp; while true; do sleep 1; done"
 
 
 }
@@ -27,6 +26,10 @@ function clearIntermediateImages() {
     docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
 }
 
+function clearAllContainers() {
+    docker stop $(docker ps -a -q)
+    docker rm $(docker ps -a -q)
+}
 
 function main(){
     buildDependencies
