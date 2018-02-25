@@ -3,10 +3,12 @@ MAINTAINER Matthew Puzey "mpuzey1@outlook.com"
 
 #ADD nginx.conf /etc/nginx/
 ADD . /
+ADD nginx.pp /nginx.pp
 
 EXPOSE 80 32768
 
-RUN puppet apply /nginx.pp
-#CMD ["puppet", "apply", "nginx.pp"]
+RUN ls -l /
+RUN pwd
 
-#CMD ["nginx"]
+#RUN puppet apply /nginx.pp
+#CMD ["puppet", "apply", "nginx.pp"]
