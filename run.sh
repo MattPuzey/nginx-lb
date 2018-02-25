@@ -1,4 +1,6 @@
 #!/bin/bash
+#set -e
+
 function buildDependencies (){
     pushd puppet-base
     docker build . -t puppet-base

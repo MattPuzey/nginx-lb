@@ -4,9 +4,8 @@ MAINTAINER Matthew Puzey "mpuzey1@outlook.com"
 #ADD nginx.conf /etc/nginx/
 ADD nginx.pp /nginx.pp
 
-EXPOSE 80 32768
+RUN puppet apply --modulepath=/modules -e "class { 'nginx': }"
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["nginx"]
 
-RUN pwd
-
-#RUN puppet apply /nginx.pp
-#CMD ["puppet", "apply", "nginx.pp"]
