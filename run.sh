@@ -1,6 +1,6 @@
 #!/bin/bash
 function buildDependencies (){
-    pushd "puppet-base"
+    pushd puppet-base
     docker build . -t puppet-base
     popd
 }
@@ -14,7 +14,7 @@ function runLoadBalancer() {
     pushd web
     docker build . --rm -t web
     popd
-    docker run -d --publish 32768:80 --name nginx nginx
+    docker run -it --publish 32768:80 --name nginx nginx
 }
 
 function clearIntermediateImages() {
