@@ -18,8 +18,6 @@ function loadBalancer() {
     popd
 #    docker run -td --publish 32768:80 --name nginx nginx
     docker run -it --publish 32768:80 --name nginx nginx sh -c "puppet apply /nginx.pp; while true; do sleep 1; done"
-
-
 }
 
 function clearIntermediateImages() {
