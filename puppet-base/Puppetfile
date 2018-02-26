@@ -1,2 +1,6 @@
+forge "https://forge.puppetlabs.com"
+
+mod "puppetlabs-apt", "4.5.1"
+
 mod "nginx",
        :git => "https://github.com/jfryman/puppet-nginx"

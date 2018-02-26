@@ -1,29 +1,28 @@
-include nginx
 
-package { "nginx":
-    ensure => installed
+class{'nginx':
+    manage_repo => true,
+    package_source => 'nginx-mainline'
 }
 
-service { "nginx":
-    require => Package["nginx"],
-    ensure => running,
-    enable => true
+nginx::resource::server{'www.app_layer.com':
+    www_root => '/opt/html/',
 }
 
-file { "/etc/nginx/sites-enabled/default":
-    require => Package["nginx"],
-    ensure  => absent,
-    notify  => Service["nginx"]
-}
-
-nginx::resource::upstream { 'app_layer':
-    members => [
-      'server 127.0.0.1:6060',
-      'server 127.0.0.1:6061'
+nginx::resource::upstream { 'upstream_app':
+  members => [
+    'server 127.0.0.1:6060',
+    'server 127.0.0.1:6061'
   ],
 }
 
-nginx::resource::server { 'app_layer.com':
-  listen_port => 80,
-  proxy => 'http://app_layer',
+nginx::resource::location{'/':
+  proxy => 'http://upstream_app/' ,
+  server => 'www.app_layer.com'
 }
+
+
+# exec { 'Disable Nginx daemon mode':
+#   path    => '/bin',
+#   command => 'echo "daemon off;" >> /etc/nginx/nginx.conf',
+#   unless  => 'grep "daemon off" /etc/nginx/nginx.conf',
+# }
