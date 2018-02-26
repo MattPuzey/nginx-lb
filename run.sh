@@ -9,6 +9,12 @@ function buildDependencies (){
 
 function appInstance() {
     local INSTANCE_NAME=$1
+
+    docker rm -f go-app
+    pushd app
+    docker build . --rm -t go-app
+    popd
+    docker run -itd --publish 6060:8080 --rm --name go-app go-app
 }
 
 function loadBalancer() {
@@ -28,12 +34,12 @@ function clearAllContainers() {
     docker stop $(docker ps -a -q)
     docker rm $(docker ps -a -q)
 }
-
-function main(){
-    buildDependencies
-    runAppInstance 1
-    runAppInstance 2
-    runLoadBalancer
-    clearIntermediateImages
-}
+#
+#function main(){
+#    buildDependencies
+#    runAppInstance 1
+#    runAppInstance 2
+#    runLoadBalancer
+#    clearIntermediateImages
+#}
 $@

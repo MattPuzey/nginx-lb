@@ -4,21 +4,28 @@ class{'nginx':
     package_source => 'nginx-mainline'
 }
 
-nginx::resource::server{'www.app_layer.com':
-    www_root => '/opt/html/',
+file { "/etc/nginx/sites-enabled/default":
+    require => Package["nginx"],
+    ensure  => absent,
+    notify  => Service["nginx"]
+}
+
+nginx::resource::server{'test2.local':
+    proxy => 'http://upstream_app',
+    # use_default_location => false
 }
 
 nginx::resource::upstream { 'upstream_app':
   members => [
-    'server 127.0.0.1:6060',
-    'server 127.0.0.1:6061'
+    '127.0.0.1:6060',
+    # '127.0.0.1:6061'
   ],
 }
 
-nginx::resource::location{'/':
-  proxy => 'http://upstream_app/' ,
-  server => 'www.app_layer.com'
-}
+# nginx::resource::location{'/':
+#   proxy => 'http://upstream_app/' ,
+#   server => 'www.app_layer.com'
+# }
 
 
 # exec { 'Disable Nginx daemon mode':
