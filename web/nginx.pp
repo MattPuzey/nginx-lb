@@ -10,9 +10,16 @@ file { "/etc/nginx/sites-enabled/default":
     notify  => Service["nginx"]
 }
 
-nginx::resource::server{'test2.local':
-    proxy => 'http://upstream_app',
-    # use_default_location => false
+file { "/etc/nginx/conf.d/default.conf":
+    require => Package["nginx"],
+    ensure  => absent,
+    notify  => Service["nginx"]
+}
+
+nginx::resource::server{'example.com':
+    proxy => 'http://upstream_app/',
+    use_default_location => false,
+    server_name => ['example.com']
 }
 
 nginx::resource::upstream { 'upstream_app':
@@ -22,12 +29,12 @@ nginx::resource::upstream { 'upstream_app':
   ],
 }
 
-# nginx::resource::location{'/':
-#   proxy => 'http://upstream_app/' ,
-#   server => 'www.app_layer.com'
-# }
+nginx::resource::location{'/':
+  proxy => 'http://upstream_app/' ,
+  server => 'example.com'
+}
 
-
+#
 # exec { 'Disable Nginx daemon mode':
 #   path    => '/bin',
 #   command => 'echo "daemon off;" >> /etc/nginx/nginx.conf',
