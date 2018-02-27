@@ -16,22 +16,24 @@ file { "/etc/nginx/conf.d/default.conf":
     notify  => Service["nginx"]
 }
 
-nginx::resource::server{'example.com':
+nginx::resource::server{'goapp.com':
     proxy => 'http://upstream_app/',
     use_default_location => false,
-    server_name => ['example.com']
+    server_name => ['goapp.com'],
+    proxy_connect_timeout => 120
 }
 
 nginx::resource::upstream { 'upstream_app':
   members => [
-    '127.0.0.1:6060',
-    # '127.0.0.1:6061'
+    # variablise this to be 127.0.0.1 for linux systems with -net=host
+    'docker.for.mac.localhost:6060',
+    'docker.for.mac.localhost:6061'
   ],
 }
 
 nginx::resource::location{'/':
   proxy => 'http://upstream_app/' ,
-  server => 'example.com'
+  server => 'goapp.com'
 }
 
 #

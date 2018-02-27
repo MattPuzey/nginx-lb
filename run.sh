@@ -9,12 +9,13 @@ function buildDependencies (){
 
 function appInstance() {
     local INSTANCE_NAME=$1
+    local PORT=$2
 
-    docker rm -f go-app
+    docker rm -f ${INSTANCE_NAME}
     pushd app
     docker build . --rm -t go-app
     popd
-    docker run -itd --publish 6060:8080 --rm --name go-app go-app
+    docker run -itd --publish ${PORT}:8080 --rm --name ${INSTANCE_NAME} go-app
 }
 
 function loadBalancer() {
@@ -22,8 +23,8 @@ function loadBalancer() {
     pushd web
     docker build . --rm -t nginx
     popd
-#    docker run -td --publish 32768:80 --name nginx nginx
-    docker run -it --publish 32768:80 --name nginx nginx sh -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
+    docker run -it --publish 32768:80 --name nginx nginx sh  \
+     -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
 }
 
 function clearIntermediateImages() {
@@ -37,8 +38,8 @@ function clearAllContainers() {
 #
 #function main(){
 #    buildDependencies
-#    runAppInstance 1
-#    runAppInstance 2
+#    appInstance go-instance1 6060
+#    appInstance go-instance2 6061
 #    runLoadBalancer
 #    clearIntermediateImages
 #}

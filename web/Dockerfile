@@ -8,3 +8,4 @@ ADD nginx.pp /nginx.pp
 #RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 EXPOSE 80
 
+
