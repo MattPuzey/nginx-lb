@@ -8,14 +8,23 @@ function buildDependencies (){
 }
 
 function appInstance() {
-    local INSTANCE_NAME=$1
-    local PORT=$2
+    local instance_name=$1
+    local port=$2
 
-    docker rm -f ${INSTANCE_NAME}
+    docker rm -f ${instance_name}
     pushd app
     docker build . --rm -t go-app
     popd
-    docker run -itd --publish ${PORT}:8080 --rm --name ${INSTANCE_NAME} go-app
+    docker run -itd --publish ${port}:8080 --rm --name ${instance_name} go-app
+}
+
+function checkHostType() {
+    unameOut="$(uname -s)"
+    case "${unameOut}" in
+        Linux*)     machine=Linux;;
+        Darwin*)    machine=Mac;;
+        *)          machine="UNKNOWN:${unameOut}"
+    esac
 }
 
 function loadBalancer() {
@@ -23,10 +32,17 @@ function loadBalancer() {
     pushd web
     docker build . --rm -t nginx
     popd
-    docker run -it --publish 32768:80 --name nginx nginx sh  \
-     -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
-    docker run -it --publish 32768:80 --name nginx nginx sh  \
-     -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
+
+    checkHostType
+#    if [ ${machine} -eq "Mac"]; then
+#        echo Runing mac ${machine} build of NGINX load balancer
+
+        docker run -it --publish 32768:80 --name nginx nginx sh  \
+         -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
+#    fi
+#   for linux hosts:
+#    docker run -it --publish 32768:80 --network host --name nginx nginx sh  \
+#     -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
 }
 
 function clearIntermediateImages() {
@@ -39,11 +55,10 @@ function clearAllContainers() {
 }
 
 
-function main(){
+function fullDemo(){
     buildDependencies
     appInstance go-instance1 6060
     appInstance go-instance2 6061
     loadBalancer
-#    clearIntermediateImages
 }
 $@
