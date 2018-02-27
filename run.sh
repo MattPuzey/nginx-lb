@@ -25,6 +25,8 @@ function loadBalancer() {
     popd
     docker run -it --publish 32768:80 --name nginx nginx sh  \
      -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
+    docker run -it --publish 32768:80 --name nginx nginx sh  \
+     -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
 }
 
 function clearIntermediateImages() {
@@ -35,12 +37,13 @@ function clearAllContainers() {
     docker stop $(docker ps -a -q)
     docker rm $(docker ps -a -q)
 }
-#
-#function main(){
-#    buildDependencies
-#    appInstance go-instance1 6060
-#    appInstance go-instance2 6061
-#    runLoadBalancer
+
+
+function main(){
+    buildDependencies
+    appInstance go-instance1 6060
+    appInstance go-instance2 6061
+    loadBalancer
 #    clearIntermediateImages
-#}
+}
 $@

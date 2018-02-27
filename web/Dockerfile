@@ -1,11 +1,10 @@
 FROM puppet-base
 MAINTAINER Matthew Puzey "mpuzey1@outlook.com"
 
-#ADD nginx.conf /etc/nginx/
-ADD nginx.pp /nginx.pp
+ADD . /
 
-#RUN puppet apply --modulepath=/modules -e "class { 'nginx': }"
-#RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN librarian-puppet install
+
 EXPOSE 80
 
 

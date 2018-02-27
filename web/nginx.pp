@@ -25,9 +25,11 @@ nginx::resource::server{'goapp.com':
 
 nginx::resource::upstream { 'upstream_app':
   members => [
-    # variablise this to be 127.0.0.1 for linux systems with -net=host
-    'docker.for.mac.localhost:6060',
-    'docker.for.mac.localhost:6061'
+      # variablise this to be 127.0.0.1 for linux systems
+      'docker.for.mac.localhost:6060',
+      'docker.for.mac.localhost:6061',
+      '127.0.0.1:6060',
+      '127.0.0.1:6061'
   ],
 }
 
