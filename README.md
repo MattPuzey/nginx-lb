@@ -2,12 +2,13 @@
 
 ## Introduction 
 
-This demo is a dockerised demonstration of a simple load balancing scenario whereby a pair of application layer web services are load balanced by and NGINX instance using the round robin method.
+This demo is a dockerised demonstration of a simple load balancing scenario whereby a pair of application layer web services are load balanced by an NGINX instance using the round robin method.
 
 ## Prerequisites
 
 For MacOS users:
-* Docker for Mac v 17.06 or above
+* Docker for Mac v 17.06 - 17.12
+    
 
 For linux distributions (untested):
 * A recent Docker installation  

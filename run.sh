@@ -37,11 +37,11 @@ function loadBalancer() {
 #    if [ ${machine} -eq "Mac"]; then
 #        echo Runing mac ${machine} build of NGINX load balancer
 
-        docker run -it --publish 32768:80 --name nginx nginx sh  \
+        docker run -itd --publish 32768:80 --name nginx nginx sh  \
          -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
 #    fi
 #   for linux hosts:
-#    docker run -it --publish 32768:80 --network host --name nginx nginx sh  \
+#    docker run -itd --publish 32768:80 --network host --name nginx nginx sh  \
 #     -c "puppet apply /nginx.pp --modulepath=/modules; while true; do sleep 1; done"
 }
 
