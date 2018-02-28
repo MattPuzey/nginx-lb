@@ -33,6 +33,9 @@ nginx::resource::upstream { 'upstream_app':
       # For linux distros (untested):
       # '127.0.0.1:6060',
       # '127.0.0.1:6061'
+      # For windows (untested):
+      # 'docker.for.win.localhost:6060',
+      # 'docker.for.win.localhost:6061'
   ],
 }
 
@@ -40,10 +43,3 @@ nginx::resource::location{'/':
   proxy => 'http://upstream_app/' ,
   server => 'goapp.com'
 }
-
-#
-# exec { 'Disable Nginx daemon mode':
-#   path    => '/bin',
-#   command => 'echo "daemon off;" >> /etc/nginx/nginx.conf',
-#   unless  => 'grep "daemon off" /etc/nginx/nginx.conf',
-# }
